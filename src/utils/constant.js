@@ -5,3 +5,5 @@ export const ROLE_TYPE = {
 }
 
 export const CANCEL_REQUEST_MESSAGE = 'cancel request'
+
+export const HOST = 'https://ssl.inewhome.com'

@@ -6,8 +6,30 @@ import store from 'store'
 import { ROLE_TYPE } from 'utils/constant'
 import { queryLayout, pathMatchRegexp } from 'utils'
 import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
+import database from '../../config/menu.config'
 import api from 'api'
 import config from 'config'
+
+const { getUserInfo, logout } = api
+
+const EnumRoleType = {
+  ADMIN: 'admin',
+  DEFAULT: 'guest',
+  DEVELOPER: 'developer',
+}
+
+const userPermission = {
+  DEFAULT: {
+    visit: ['1', '2', '21', '7', '5', '51', '52', '53'],
+    role: EnumRoleType.DEFAULT,
+  },
+  ADMIN: {
+    role: EnumRoleType.ADMIN,
+  },
+  DEVELOPER: {
+    role: EnumRoleType.DEVELOPER,
+  },
+}
 
 const { queryRouteList, logoutUser, queryUserInfo } = api
 
@@ -70,14 +92,24 @@ export default {
   effects: {
     *query({ payload }, { call, put, select }) {
       // store isInit to prevent query trigger by refresh
-      const isInit = store.get('isInit')
-      if (isInit) return
+      // const isInit = store.get('isInit')
+      // if (isInit) return
       const { locationPathname } = yield select(_ => _.app)
-      const { success, user } = yield call(queryUserInfo, payload)
-      if (success && user) {
-        const { list } = yield call(queryRouteList)
-        const { permissions } = user
-        let routeList = list
+      const queryUserInfo = {
+        // g_tk: ,
+        g_ty: 'bbc',
+        _dc: 1568172025216,
+      }
+      const data = yield call(getUserInfo, queryUserInfo)
+      // if (success && user) {
+      if (data.ErrCode === 0) {
+        // const { list } = yield call(queryRouteList);
+        const list = database
+        //const { permissions } = user;
+        const permissions = userPermission.ADMIN
+
+        // let routeList = list
+        let routeList = database
         if (
           permissions.role === ROLE_TYPE.ADMIN ||
           permissions.role === ROLE_TYPE.DEVELOPER
@@ -97,11 +129,11 @@ export default {
         }
         store.set('routeList', routeList)
         store.set('permissions', permissions)
-        store.set('user', user)
+        store.set('user', data)
         store.set('isInit', true)
         if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
           router.push({
-            pathname: '/dashboard',
+            pathname: '/home',
           })
         }
       } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
@@ -115,8 +147,8 @@ export default {
     },
 
     *signOut({ payload }, { call, put }) {
-      const data = yield call(logoutUser)
-      if (data.success) {
+      const data = yield call(logout)
+      if (data.ErrCode === 0) {
         store.set('routeList', [])
         store.set('permissions', { visit: [] })
         store.set('user', {})

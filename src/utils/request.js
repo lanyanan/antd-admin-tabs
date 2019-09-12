@@ -2,39 +2,26 @@ import axios from 'axios'
 import { cloneDeep, isEmpty } from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
-import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
+import { CANCEL_REQUEST_MESSAGE, HOST } from 'utils/constant'
 import qs from 'qs'
 
+axios.defaults.withCredentials = true
 const { CancelToken } = axios
 window.cancelRequest = new Map()
 
 export default function request(options) {
   let { data, url, method = 'get' } = options
   const cloneData = cloneDeep(data)
-
-  try {
-    let domain = ''
-    const urlMatch = url.match(/[a-zA-z]+:\/\/[^/]*/)
-    if (urlMatch) {
-      ;[domain] = urlMatch
-      url = url.slice(domain.length)
-    }
-
-    const match = pathToRegexp.parse(url)
-    url = pathToRegexp.compile(url)(data)
-
-    for (const item of match) {
-      if (item instanceof Object && item.name in cloneData) {
-        delete cloneData[item.name]
-      }
-    }
-    url = domain + url
-  } catch (e) {
-    message.error(e.message)
+  url = HOST + url + `?g_ty=bbc&_dc=${new Date().getTime()}`
+  // 设置请求头和设置cors模式
+  options['headers'] = {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Sec-Fetch-Mode': 'cors',
   }
-
+  //
   options.url = url
-  options.params = cloneData
+  options.data = qs.stringify(cloneData)
+
   options.cancelToken = new CancelToken(cancel => {
     window.cancelRequest.set(Symbol(Date.now()), {
       pathname: window.location.pathname,

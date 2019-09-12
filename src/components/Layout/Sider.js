@@ -18,6 +18,7 @@ class Sider extends PureComponent {
       collapsed,
       onThemeChange,
       onCollapseChange,
+      onHandlePage,
     } = this.props
 
     return (
@@ -33,7 +34,7 @@ class Sider extends PureComponent {
       >
         <div className={styles.brand}>
           <div className={styles.logo}>
-            <img alt="logo" src={config.logoPath} />
+            {/* <img alt="logo" src={config.logoPath} /> */}
             {collapsed ? null : <h1>{config.siteName}</h1>}
           </div>
         </div>
@@ -50,6 +51,7 @@ class Sider extends PureComponent {
               theme={theme}
               isMobile={isMobile}
               collapsed={collapsed}
+              onHandlePage={onHandlePage}
               onCollapseChange={onCollapseChange}
             />
           </ScrollBar>

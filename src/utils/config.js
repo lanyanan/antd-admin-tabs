@@ -1,8 +1,9 @@
 module.exports = {
-  siteName: 'AntD Admin',
+  siteName: '新家BBC管理系统',
   copyright: 'Ant Design Admin  ©2019 zuiidea',
-  logoPath: '/logo.svg',
-  apiPrefix: '/api/v1',
+  logoPath: '',
+  // apiPrefix: '/api/v1',
+  apiPrefix: '',
   fixedHeader: true, // sticky primary layout header
 
   /* Layout configuration, specify which layout to use for route. */

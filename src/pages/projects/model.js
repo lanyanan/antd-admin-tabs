@@ -4,7 +4,7 @@ import api from 'api'
 const { login } = api
 
 export default {
-  namespace: 'login',
+  namespace: 'project',
 
   state: {},
 

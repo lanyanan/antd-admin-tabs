@@ -76,6 +76,10 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/api/v1/weather': '/v3/weather' },
     },
+    '/api/v1/user': {
+      target: 'http://antd-admin.zuiidea.com',
+      changeOrigin: true,
+    },
   },
   alias: {
     api: resolve(__dirname, './src/services/'),

@@ -35,27 +35,27 @@ class Bread extends PureComponent {
     })
   }
   render() {
-    const { routeList, location, i18n } = this.props
+    // const { routeList, location, i18n } = this.props
 
-    // Find a route that matches the pathname.
-    const currentRoute = routeList.find(
-      _ => _.route && pathMatchRegexp(_.route, location.pathname)
-    )
+    // // Find a route that matches the pathname.
+    // const currentRoute = routeList.find(
+    //   _ => _.route && pathMatchRegexp(_.route, location.pathname)
+    // )
 
-    // Find the breadcrumb navigation of the current route match and all its ancestors.
-    const paths = currentRoute
-      ? queryAncestors(routeList, currentRoute, 'breadcrumbParentId').reverse()
-      : [
-          routeList[0],
-          {
-            id: 404,
-            name: i18n.t`Not Found`,
-          },
-        ]
+    // // Find the breadcrumb navigation of the current route match and all its ancestors.
+    // const paths = currentRoute
+    //   ? queryAncestors(routeList, currentRoute, 'breadcrumbParentId').reverse()
+    //   : [
+    //       routeList[0],
+    //       {
+    //         id: 404,
+    //         name: i18n.t`Not Found`,
+    //       },
+    //     ]
 
     return (
       <Breadcrumb className={styles.bread}>
-        {this.generateBreadcrumbs(paths)}
+        {/* {this.generateBreadcrumbs(paths)} */}
       </Breadcrumb>
     )
   }
