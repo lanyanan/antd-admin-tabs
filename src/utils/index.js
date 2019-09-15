@@ -312,13 +312,16 @@ export function getRoutes(path, routerData, tabListKey) {
   //     path: `${path}${item}`,
   //   }
   // })
-  console.log(tabListKey, 9090)
   const needRoute = routes[0]
+  if (!needRoute.route) return null
   const NeedComponent = require('../../src/pages' + needRoute.route)
+  if (tabListKey.indexOf(needRoute.route) > -1) {
+    return needRoute.route
+  }
   const renderRoutes = {
     exact: true,
     content: NeedComponent.default,
-    key: needRoute.route + `/${parseInt(Math.random() * 10, 10)}`,
+    key: needRoute.route,
     name: needRoute.name,
     path: needRoute.route,
   }

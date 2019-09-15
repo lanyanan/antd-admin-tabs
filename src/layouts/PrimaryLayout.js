@@ -59,8 +59,38 @@ class PrimaryLayout extends PureComponent {
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { currentOpenTabKey, currentOpenTabProps } = nextProps.app
+    console.log(this.props.app, nextProps)
+    if (this.props.app.currentOpenTabKey != currentOpenTabKey) {
+      this.openNewTabs(currentOpenTabProps)
+    }
+  }
+
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler)
+  }
+
+  openNewTabs = props => {
+    console.log(props)
+    const { tabListKey, tabList } = this.state
+    // dispatch({
+    //   type:'app/'
+    // })
+    if (tabListKey.indexOf(props.key) > -1) {
+      this.setState({
+        activeKey: props.key,
+      })
+      return false
+    }
+    this.setState({
+      activeKey: props.key,
+    })
+    tabList.push(props)
+    this.setState({
+      tabListKey: tabList.map(va => va.key),
+      tabList,
+    })
   }
 
   onCollapseChange = collapsed => {
@@ -86,10 +116,21 @@ class PrimaryLayout extends PureComponent {
       tabListKey
     )
 
-    this.setState({
-      activeKey: key,
-    })
-    tabList.push(tabLists)
+    if (tabLists) {
+      this.setState({
+        activeKey: key,
+      })
+      if (typeof tabLists === 'object') {
+        this.setState({
+          activeKey: key,
+        })
+        tabList.push(tabLists)
+      }
+    } else {
+      return false
+    }
+
+    // tabList.push(tabLists)
     // tabLists.map(v => {
     //   if (v.key === key) {
     //     if (tabList.length === 0) {
@@ -148,7 +189,6 @@ class PrimaryLayout extends PureComponent {
   }
 
   onClickHover = e => {
-    console.log(e)
     // message.info(`Click on item ${key}`);
     let { key } = e,
       { activeKey, tabList, tabListKey } = this.state

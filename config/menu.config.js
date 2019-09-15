@@ -7,7 +7,7 @@ export default [
           name: '项目管理'
       },
       icon: 'project',
-      route: '/projects',
+      route: '/project',
     },
     {
       id: '3',

@@ -36,6 +36,8 @@ const { queryRouteList, logoutUser, queryUserInfo } = api
 export default {
   namespace: 'app',
   state: {
+    currentOpenTabKey: '',
+    currentOpenTabProps: '',
     routeList: [
       {
         id: '1',
@@ -90,6 +92,16 @@ export default {
     },
   },
   effects: {
+    *openNewTabs({ payload }, { call, put, select }) {
+      console.log(payload)
+      yield put({
+        type: 'updateState',
+        payload: {
+          currentOpenTabKey: payload.key,
+          currentOpenTabProps: payload,
+        },
+      })
+    },
     *query({ payload }, { call, put, select }) {
       // store isInit to prevent query trigger by refresh
       // const isInit = store.get('isInit')
@@ -100,9 +112,9 @@ export default {
         g_ty: 'bbc',
         _dc: 1568172025216,
       }
-      const data = yield call(getUserInfo, queryUserInfo)
+      //const data = yield call(getUserInfo, queryUserInfo)
       // if (success && user) {
-      if (data.ErrCode === 0) {
+      if (true) {
         // const { list } = yield call(queryRouteList);
         const list = database
         //const { permissions } = user;
@@ -129,7 +141,7 @@ export default {
         }
         store.set('routeList', routeList)
         store.set('permissions', permissions)
-        store.set('user', data)
+        // store.set('user', data)
         store.set('isInit', true)
         if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
           router.push({
@@ -161,6 +173,7 @@ export default {
   },
   reducers: {
     updateState(state, { payload }) {
+      console.log(payload)
       return {
         ...state,
         ...payload,
