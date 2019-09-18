@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Card, Row, Col, Table } from 'antd'
+import { Table } from 'antd'
 import { withI18n } from '@lingui/react'
 import { Page } from 'components'
 import { connect } from 'dva'
@@ -16,111 +16,96 @@ for (let i = 0; i < 100; i++) {
 }
 
 @withI18n()
-@connect(({ app, loading }) => ({ app, loading }))
+@connect(({ project, app, loading }) => ({ app, project, loading }))
 class Project extends PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({ type: 'project/list', payload: {} })
+  }
   columns = [
     {
-      title: 'id',
+      title: '序号',
       width: 100,
-      dataIndex: 'id',
-      key: 'id',
-      fixed: 'left',
+      dataIndex: 'Id',
+      key: 'Id',
     },
     {
-      title: 'Full Name',
-      width: 100,
-      dataIndex: 'name',
-      key: 'name',
-      fixed: 'left',
+      title: '项目名称',
+      dataIndex: 'Name',
+      key: 'Name',
       render: (value, row) => {
         return (
-          <a onClick={() => this.openTabs(row)} href="javascript:">
-            窗口打开的链接
-          </a>
+          <span onClick={() => this.openTabs(row)} style={{ color: '#1890ff' }}>
+            {value}
+          </span>
         )
       },
     },
     {
-      title: 'Age',
-      width: 100,
-      dataIndex: 'age',
-      key: 'age',
-      fixed: 'left',
+      title: '城市',
+      dataIndex: 'CityName',
+      key: 'CityName',
     },
     {
-      title: 'Column 1',
-      dataIndex: 'address',
-      key: '1',
-      width: 150,
+      title: '负责人',
+      dataIndex: 'UserName',
+      key: 'UserName',
     },
     {
-      title: 'Column 2',
-      dataIndex: 'address',
-      key: '2',
-      width: 150,
+      title: '项目交付类型',
+      dataIndex: 'Type',
+      key: 'Type',
+      render: type => (type === 0 ? '毛坯' : '精装'),
     },
     {
-      title: 'Column 3',
-      dataIndex: 'address',
-      key: '3',
-      width: 150,
+      title: '销售周期',
+      dataIndex: 'SalesStartTime',
+      key: 'SalesStartTime',
+      render: time => time,
     },
     {
-      title: 'Column 4',
-      dataIndex: 'address',
-      key: '4',
-      width: 150,
+      title: '施工周期',
+      dataIndex: 'ConstructionStartTime',
+      key: 'ConstructionStartTime',
+      render: time => time,
     },
     {
-      title: 'Column 5',
-      dataIndex: 'address',
-      key: '5',
-      width: 150,
+      title: '基础包是否计费',
+      dataIndex: 'BasicPriceType',
+      key: 'BasicPriceType',
+      render: type => (type === 1 ? '不计价' : '计价'),
     },
     {
-      title: 'Column 6',
-      dataIndex: 'address',
-      key: '6',
-      width: 150,
-    },
-    {
-      title: 'Column 7',
-      dataIndex: 'address',
-      key: '7',
-      width: 150,
-    },
-    { title: 'Column 8', dataIndex: 'address', key: '8' },
-    {
-      title: 'Action',
-      key: 'operation',
-      fixed: 'right',
-      width: 100,
-      render: () => <a>action</a>,
+      title: '项目状态',
+      dataIndex: 'State',
+      key: 'State',
+      render: type => (type === 0 ? '进行中' : '待上线'),
     },
   ]
   openTabs = row => {
     const { dispatch } = this.props
-    console.log('dakaixinchuangkou')
     const path = '/project/details'
     dispatch({
       type: 'app/openNewTabs',
       payload: {
         exact: true,
         content: require('./details').default,
-        key: path + `/${row.id}`,
-        name: '项目详情' + `${row.id}`,
-        path: path + `/${row.id}`,
+        key: path + `/${row.Id}`,
+        name: `${row.Name}`,
+        path: path + `/${row.Id}`,
       },
     })
   }
   render() {
-    // const {onHandlePage} = this.props;
+    const {
+      project: { list },
+    } = this.props
     return (
       <Page inner>
         <Table
           columns={this.columns}
-          dataSource={data}
-          scroll={{ x: 1500, y: 300 }}
+          dataSource={list}
+          pagination={{ showSizeChanger: true, showQuickJumper: true }}
         ></Table>
       </Page>
     )

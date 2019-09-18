@@ -6,95 +6,60 @@ import { connect } from 'dva'
 
 const columns = [
   {
-    title: 'Full Name',
+    title: '手机号码',
     width: 100,
     dataIndex: 'name',
     key: 'name',
-    fixed: 'left',
   },
   {
-    title: 'Age',
+    title: '业务类型',
     width: 100,
     dataIndex: 'age',
     key: 'age',
-    fixed: 'left',
   },
   {
-    title: 'Column 1',
+    title: '备注',
     dataIndex: 'address',
     key: '1',
     width: 150,
   },
   {
-    title: 'Column 2',
+    title: '状态',
     dataIndex: 'address',
     key: '2',
     width: 150,
   },
   {
-    title: 'Column 3',
+    title: '创建时间',
     dataIndex: 'address',
     key: '3',
     width: 150,
   },
   {
-    title: 'Column 4',
+    title: '操作',
     dataIndex: 'address',
     key: '4',
     width: 150,
   },
-  {
-    title: 'Column 5',
-    dataIndex: 'address',
-    key: '5',
-    width: 150,
-  },
-  {
-    title: 'Column 6',
-    dataIndex: 'address',
-    key: '6',
-    width: 150,
-  },
-  {
-    title: 'Column 7',
-    dataIndex: 'address',
-    key: '7',
-    width: 150,
-  },
-  { title: 'Column 8', dataIndex: 'address', key: '8' },
-  {
-    title: 'Action',
-    key: 'operation',
-    fixed: 'right',
-    width: 100,
-    render: () => <a>action</a>,
-  },
 ]
 
-const data = []
-for (let i = 0; i < 5; i++) {
-  data.push({
-    key: i,
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  })
-}
-
 @withI18n()
-@connect(({ loading }) => ({ loading }))
-class Project extends PureComponent {
+@connect(({ loading, order }) => ({ loading, order }))
+class Order extends PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({ type: 'order/list', payload: {} })
+  }
   render() {
+    const {
+      order: { list },
+    } = this.props
     return (
       <Page inner>
-        <Table
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: 1500, y: 300 }}
-        ></Table>
+        <Table columns={columns} dataSource={list}></Table>
       </Page>
     )
   }
 }
 
-export default Project
+export default Order
