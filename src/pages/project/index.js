@@ -3,13 +3,13 @@ import { Table } from 'antd'
 import { withI18n } from '@lingui/react'
 import { Page } from 'components'
 import { connect } from 'dva'
-
+import Search from './components/search'
 const data = []
 for (let i = 0; i < 100; i++) {
   data.push({
-    id: i,
+    Id: i,
     key: i,
-    name: `Edrward ${i}`,
+    Name: `Edrward ${i}`,
     age: 32,
     address: `London Park no. ${i}`,
   })
@@ -35,7 +35,10 @@ class Project extends PureComponent {
       key: 'Name',
       render: (value, row) => {
         return (
-          <span onClick={() => this.openTabs(row)} style={{ color: '#1890ff' }}>
+          <span
+            onClick={() => this.openTabs(row)}
+            style={{ color: '#1890ff', cursor: 'pointer' }}
+          >
             {value}
           </span>
         )
@@ -93,6 +96,7 @@ class Project extends PureComponent {
         key: path + `/${row.Id}`,
         name: `${row.Name}`,
         path: path + `/${row.Id}`,
+        source: 'link',
       },
     })
   }
@@ -102,9 +106,10 @@ class Project extends PureComponent {
     } = this.props
     return (
       <Page inner>
+        <Search />
         <Table
           columns={this.columns}
-          dataSource={list}
+          dataSource={data}
           pagination={{ showSizeChanger: true, showQuickJumper: true }}
         ></Table>
       </Page>

@@ -67,7 +67,7 @@ class Layout extends Component {
     if (!catalogs[language]) language = defaultLanguage
 
     return (
-      <LocaleProvider locale={languages[language]}>
+      <LocaleProvider locale={languages['zh']}>
         <I18nProvider language={language} catalogs={catalogs}>
           <BaseLayout>{children}</BaseLayout>
         </I18nProvider>

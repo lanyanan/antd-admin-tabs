@@ -66,7 +66,7 @@ class SiderMenu extends PureComponent {
       }
       return (
         <Menu.Item key={item.id} onClick={_this.onHandlePage}>
-          <Navlink to={addLangPrefix(item.route) || '#'}>
+          <Navlink to={item.route || '#'}>
             {item.icon && <Icon type={item.icon} />}
             <span>{item.name}</span>
           </Navlink>
@@ -103,7 +103,7 @@ class SiderMenu extends PureComponent {
       : {
           openKeys: this.state.openKeys,
         }
-
+    console.log(selectedKeys)
     return (
       <Menu
         mode="inline"

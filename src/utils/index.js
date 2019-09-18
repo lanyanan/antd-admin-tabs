@@ -291,7 +291,7 @@ function getRenderArr(routes) {
  * @param {string} path
  * @param {routerData} routerData
  */
-export function getRoutes(path, routerData, tabListKey) {
+export function getRoutes(path, routerData, tabListKey, source) {
   let routes = routerData.filter(
     routePath => routePath.route.indexOf(path) === 0 && routePath !== path
   )
@@ -324,6 +324,7 @@ export function getRoutes(path, routerData, tabListKey) {
     key: needRoute.route,
     name: needRoute.name,
     path: needRoute.route,
+    source,
   }
   return renderRoutes
 }

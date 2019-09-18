@@ -61,9 +61,17 @@ class PrimaryLayout extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     const { currentOpenTabKey, currentOpenTabProps } = nextProps.app
-    console.log(this.props.app, nextProps)
-    if (this.props.app.currentOpenTabKey != currentOpenTabKey) {
+    if (
+      this.props.app.currentOpenTabKey != currentOpenTabKey &&
+      currentOpenTabProps.source === 'link'
+    ) {
       this.openNewTabs(currentOpenTabProps)
+    }
+    if (
+      this.props.app.currentOpenTabKey == currentOpenTabKey &&
+      currentOpenTabProps.source === 'link'
+    ) {
+      this.openSomeTabs(currentOpenTabKey)
     }
   }
 
@@ -71,8 +79,15 @@ class PrimaryLayout extends PureComponent {
     unenquireScreen(this.enquireHandler)
   }
 
+  openSomeTabs = key => {
+    const { tabListKey, tabList } = this.state
+    this.setState({
+      activeKey: key,
+    })
+  }
+
   openNewTabs = props => {
-    console.log(props)
+    // console.log(props)
     const { tabListKey, tabList } = this.state
     // dispatch({
     //   type:'app/'
@@ -102,21 +117,15 @@ class PrimaryLayout extends PureComponent {
 
   onHandlePage = e => {
     //点击左侧菜单
-    console.log(this.props)
-    const { location } = this.props
+    const { location, dispatch } = this.props
     const { tabListKey, tabList } = this.state
     const key = location.pathname
-      ? location.pathname.substring(3, location.pathname.length)
-      : ''
-    const tabLists = getRoutes(
-      location.pathname
-        ? location.pathname.substring(3, location.pathname.length)
-        : '',
-      MenuData,
-      tabListKey
-    )
-
+    const tabLists = getRoutes(location.pathname, MenuData, tabListKey, 'menu')
     if (tabLists) {
+      dispatch({
+        type: 'app/openNewTabs',
+        payload: tabLists,
+      })
       this.setState({
         activeKey: key,
       })
@@ -158,7 +167,15 @@ class PrimaryLayout extends PureComponent {
   }
   // 切换 tab页 router.push(key);
   onChange = key => {
+    const { dispatch } = this.props
     this.setState({ activeKey: key })
+    dispatch({
+      type: 'app/openNewTabs',
+      payload: {
+        currentOpenTabKey: key,
+        currentOpenTabProps: '',
+      },
+    })
     this.props.history.push({ pathname: key })
   }
 
@@ -167,6 +184,7 @@ class PrimaryLayout extends PureComponent {
   }
 
   remove = targetKey => {
+    const { dispatch } = this.props
     let { activeKey } = this.state
     let lastIndex
     this.state.tabList.forEach((pane, i) => {
@@ -183,6 +201,13 @@ class PrimaryLayout extends PureComponent {
     if (lastIndex >= 0 && activeKey === targetKey) {
       activeKey = tabList[lastIndex].key
     }
+    dispatch({
+      type: 'app/openNewTabs',
+      payload: {
+        currentOpenTabKey: activeKey,
+        currentOpenTabProps: '',
+      },
+    })
 
     this.props.history.push({ pathname: activeKey })
     this.setState({ tabList, activeKey, tabListKey: tabList.map(va => va.key) })
