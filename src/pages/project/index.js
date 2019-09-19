@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Table } from 'antd'
+// import { Table } from 'antd'
 import { withI18n } from '@lingui/react'
-import { Page } from 'components'
+import { Page, Table } from 'components'
 import { connect } from 'dva'
 import Search from './components/search'
 const data = []
@@ -100,16 +100,20 @@ class Project extends PureComponent {
       },
     })
   }
+  onSearch = values => {
+    const { dispatch } = this.props
+    dispatch({ type: 'project/list', payload: values })
+  }
   render() {
     const {
       project: { list },
     } = this.props
     return (
       <Page inner>
-        <Search />
+        <Search onSearch={this.onSearch} />
         <Table
           columns={this.columns}
-          dataSource={data}
+          dataSource={list}
           pagination={{ showSizeChanger: true, showQuickJumper: true }}
         ></Table>
       </Page>

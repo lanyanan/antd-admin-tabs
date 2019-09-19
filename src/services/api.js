@@ -9,4 +9,6 @@ export default {
   getProjectList: '/bbc/bbcproject/GetProjectList',
   // 获取预约管理列表数据
   getPreOrderList: '/bbc/BBCAppointment/QueryAppointment',
+  // 获取城市列表
+  getCityList: '/bbc/bbcproject/getcity',
 }

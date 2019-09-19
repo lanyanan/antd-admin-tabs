@@ -111,9 +111,9 @@ export default {
         g_ty: 'bbc',
         _dc: 1568172025216,
       }
-      // const data = yield call(getUserInfo, queryUserInfo)
+      const data = yield call(getUserInfo, queryUserInfo)
       // if (success && user) {
-      if (true) {
+      if (data.ErrCode === 0) {
         // const { list } = yield call(queryRouteList);
         const list = database
         //const { permissions } = user;

@@ -13,12 +13,23 @@ export default function request(options) {
   let { data, url, method = 'get' } = options
   const cloneData = cloneDeep(data)
   url = HOST + url + `?g_ty=bbc&_dc=${new Date().getTime()}`
+  if (method.toLowerCase() === 'get') {
+    let parmasUrl = ''
+    data &&
+      Object.keys(data).length > 0 &&
+      Object.entries(data).map(([key, val]) => {
+        if (val) {
+          parmasUrl = `${parmasUrl}&${key}=${val}`
+        }
+      })
+    url = url + parmasUrl
+  }
   // 设置请求头和设置cors模式
   options['headers'] = {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     'Sec-Fetch-Mode': 'cors',
   }
-  //
+
   options.url = url
   options.data = qs.stringify(cloneData)
 

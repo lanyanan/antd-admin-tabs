@@ -12,6 +12,7 @@ export default {
 
   effects: {
     *list({ payload }, { put, call, select }) {
+      console.log(payload)
       const data = yield call(getProjectList, payload)
       if (data.ErrCode === 0) {
         yield put({
