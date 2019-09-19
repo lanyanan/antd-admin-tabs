@@ -28,6 +28,7 @@
     "path-to-regexp": "^3.0.0",
     "prop-types": "^15.7.0",
     "qs": "^6.7.0",
+    "query-string": "^6.8.3",
     "react-adsense": "^0.1.0",
     "react-countup": "^4.1.0",
     "react-draft-wysiwyg": "^1.13.0",

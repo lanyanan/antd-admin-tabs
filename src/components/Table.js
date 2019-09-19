@@ -9,17 +9,16 @@ import React from 'react'
 import { Table } from 'antd'
 import { withRouter } from 'react-router-dom'
 import { router } from 'utils'
+import queryString from 'query-string'
 
 class TableClone extends React.Component {
   change = (pagination, filters, sorter, extra) => {
-    const { history } = this.props
-    console.log(pagination, this.props)
+    const { updateList } = this.props
     let parmas = {
       page: pagination.current,
       pageSize: pagination.pageSize,
     }
-    const pathname = window.location.pathname
-    history.push(history.location.pathname, { query: { ...parmas } })
+    // updateList(parmas)
   }
   render() {
     return <Table onChange={this.change} {...this.props}></Table>

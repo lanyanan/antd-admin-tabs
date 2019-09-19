@@ -18,6 +18,15 @@ for (let i = 0; i < 100; i++) {
 @withI18n()
 @connect(({ project, app, loading }) => ({ app, project, loading }))
 class Project extends PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      query: {
+        Page: 1,
+        PageSize: 10,
+      },
+    }
+  }
   componentDidMount() {
     const { dispatch } = this.props
     dispatch({ type: 'project/list', payload: {} })
@@ -102,18 +111,28 @@ class Project extends PureComponent {
   }
   onSearch = values => {
     const { dispatch } = this.props
-    dispatch({ type: 'project/list', payload: values })
+    const { query } = this.state
+    const searchQuery = { ...query, ...values }
+    this.setState({
+      query: searchQuery,
+    })
+    dispatch({ type: 'project/list', payload: searchQuery })
   }
+
   render() {
     const {
       project: { list },
     } = this.props
+    const {
+      query: { Page, PageSize },
+    } = this.state
     return (
       <Page inner>
         <Search onSearch={this.onSearch} />
         <Table
+          // updateList = {this.onSearch}
           columns={this.columns}
-          dataSource={list}
+          dataSource={data}
           pagination={{ showSizeChanger: true, showQuickJumper: true }}
         ></Table>
       </Page>
